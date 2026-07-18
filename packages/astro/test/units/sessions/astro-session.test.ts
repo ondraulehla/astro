@@ -11,6 +11,7 @@ import type {
 	AstroCookieDeleteOptions,
 } from '../../../dist/core/cookies/cookies.js';
 import type { SessionDriverFactory } from '../../../dist/core/session/types.js';
+import type { AstroLogger } from '../../../dist/core/logger/core.js';
 
 // #region Helpers
 
@@ -27,6 +28,15 @@ const defaultMockCookies: MockCookies = {
 	get: () => ({ value: 'sessionid' }),
 };
 
+/** Mock logger that satisfies AstroLogger without writing to stderr. */
+const defaultMockLogger = {
+	info: () => {},
+	warn: () => {},
+	error: () => {},
+	debug: () => {},
+	level: () => 'info',
+} as unknown as AstroLogger;
+
 const stringify = (data: unknown) => JSON.parse(devalueStringify(data));
 
 const defaultConfig: SSRManifestSession = {
@@ -40,6 +50,7 @@ function createSession(
 	cookies: MockCookies = defaultMockCookies,
 	mockStorage: Storage | null = null,
 	runtimeMode: RuntimeMode = 'production',
+	logger: AstroLogger = defaultMockLogger,
 ) {
 	// driverFactory from unstorage/drivers/memory accepts no config; wrap it to satisfy SessionDriverFactory
 	const typedDriverFactory: SessionDriverFactory = () => driverFactory();
@@ -49,6 +60,7 @@ function createSession(
 		runtimeMode,
 		driverFactory: typedDriverFactory,
 		mockStorage,
+		logger,
 	});
 }
 
@@ -604,6 +616,7 @@ describe('AstroSession - No-Cookie Short Circuit', () => {
 			runtimeMode: 'production',
 			driverFactory: countingDriverFactory,
 			mockStorage: null,
+			logger: defaultMockLogger,
 		});
 
 		const value = await session.get('nonexistent');

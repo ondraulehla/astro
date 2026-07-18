@@ -3,12 +3,21 @@ import { describe, it } from 'node:test';
 import { expectTypeOf } from 'expect-type';
 import { AstroSession } from '../../dist/core/session/runtime.js';
 import type { AstroCookies } from '../../dist/types/public/index.js';
+import type { AstroLogger } from '../../dist/core/logger/core.js';
 
 const defaultMockCookies = {
 	set: () => {},
 	delete: () => {},
 	get: () => 'astro cookie',
 };
+
+const defaultMockLogger = {
+	info: () => {},
+	warn: () => {},
+	error: () => {},
+	debug: () => {},
+	level: () => 'info',
+} as unknown as AstroLogger;
 
 // Helper to create a new session instance with mocked dependencies
 function createSession() {
@@ -23,6 +32,7 @@ function createSession() {
 		runtimeMode: 'production',
 		driverFactory: null,
 		mockStorage: null,
+		logger: defaultMockLogger,
 	});
 }
 
