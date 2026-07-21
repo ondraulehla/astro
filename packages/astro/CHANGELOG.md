@@ -1,5 +1,11 @@
 # astro
 
+## 7.1.4
+
+### Patch Changes
+
+- [#17472](https://github.com/withastro/astro/pull/17472) [`4dc590c`](https://github.com/withastro/astro/commit/4dc590c8fcdd9207492914dddb8e861c532ed904) Thanks [@astrobot-houston](https://github.com/astrobot-houston)! - Adds the missing `background` prop to the `<Image />` and `<Picture />` component types. The prop already worked at runtime, but was absent from the types, causing `astro check` to report that `background` does not exist on the component props
+
 ## 7.1.3
 
 ### Patch Changes
